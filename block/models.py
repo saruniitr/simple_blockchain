@@ -3,20 +3,18 @@ from django_extensions.db.models import TimeStampedModel
 
 
 class Role(models.Model):
-    tx = models.ForeignKey(
-        "Tx", on_delete=models.PROTECT, related_name="role_transactions"
-    )
+    name = models.CharField(max_length=32)
 
 
 class Entity(models.Model):
-    tx = models.ForeignKey(
-        "Tx", on_delete=models.PROTECT, related_name="entity_transactions"
-    )
+    INTERNAL = "INTERNAL"
+    EXTERNAL = "EXTERNAL"
+    TYPE_CHOICES = ((INTERNAL, INTERNAL), (EXTERNAL, EXTERNAL))
+    name = models.CharField(max_length=32)
+    entity_type = models.CharField(max_length=12, choices=TYPE_CHOICES)
 
-
-class Block(TimeStampedModel):
-    header = models.CharField(max_length=256)
-    previous_hash = models.CharField(max_length=64)
+    def __str__(self):
+        return self.name
 
 
 class Tx(TimeStampedModel):
@@ -26,4 +24,9 @@ class Tx(TimeStampedModel):
         Entity, on_delete=models.PROTECT, related_name="recipient"
     )
     data = models.CharField(max_length=4096, blank=True, null=True)
-    block = models.ForeignKey(Block, on_delete=models.PROTECT)
+
+
+class Block(TimeStampedModel):
+    header = models.CharField(max_length=256)
+    previous_hash = models.CharField(max_length=64)
+    hash = models.CharField(max_length=64)
