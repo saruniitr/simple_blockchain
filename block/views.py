@@ -12,7 +12,9 @@ from rest_framework.response import Response
 from block import serializers, models
 
 
-class BlockViewSet(viewsets.ModelViewSet):
+class BlockViewSet(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
     serializer_class = serializers.BlockSerializer
     queryset = models.Block.objects.all()
     permission_classes = (permissions.AllowAny,)
