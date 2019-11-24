@@ -18,12 +18,17 @@ class Entity(models.Model):
 
 
 class Tx(TimeStampedModel):
-    tx_type = models.CharField(max_length=16)
+    INTERNAL = "INTERNAL"
+    EXTERNAL = "EXTERNAL"
+    PRIVATE = "PRIVATE"
+    TX_CHOICES = ((INTERNAL, INTERNAL), (EXTERNAL, EXTERNAL), (PRIVATE, PRIVATE))
+    tx_type = models.CharField(max_length=16, choices=TX_CHOICES)
     sender = models.ForeignKey(Entity, on_delete=models.PROTECT, related_name="sender")
     recipient = models.ForeignKey(
         Entity, on_delete=models.PROTECT, related_name="recipient"
     )
     data = models.CharField(max_length=4096, blank=True, null=True)
+    tx_hash = models.CharField(max_length=64, blank=True, null=True)
 
 
 class Block(TimeStampedModel):
