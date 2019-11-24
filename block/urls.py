@@ -26,6 +26,7 @@ from block import views
 router = routers.DefaultRouter()
 router.register(r'txs', views.TransactionViewSet)
 router.register(r'blocks', views.BlockViewSet)
+router.register(r'tx', views.TransactionVerifyViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
