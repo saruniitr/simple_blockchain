@@ -1,3 +1,5 @@
+import hashlib
+
 from django.db import models
 from django_extensions.db.models import TimeStampedModel
 
@@ -35,3 +37,9 @@ class Block(TimeStampedModel):
     header = models.CharField(max_length=256)
     previous_hash = models.CharField(max_length=64)
     hash = models.CharField(max_length=64)
+
+    def calc_block_hash_sig(self):
+        key = hashlib.sha256()
+        key.update(str(self.previous_hash).encode("utf-8"))
+        key.update(str(self.hash).encode("utf-8"))
+        return key.hexdigest()

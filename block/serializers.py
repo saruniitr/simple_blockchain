@@ -5,12 +5,6 @@ from block import models
 from rest_framework import serializers
 
 
-def calc_block_hash_sig(obj):
-    key = hashlib.sha256()
-    key.update(str(obj.previous_hash).encode("utf-8"))
-    key.update(str(obj.hash).encode("utf-8"))
-    return key.hexdigest()
-
 
 def create_block(tx_obj):
     data = json.dumps({
@@ -32,7 +26,7 @@ def create_block(tx_obj):
     b.hash = key.hexdigest()
     b.save()
 
-    return calc_block_hash_sig(b)
+    return b.calc_block_hash_sig()
 
 
 class BlockSerializer(serializers.ModelSerializer):

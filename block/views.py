@@ -13,7 +13,9 @@ from block import serializers, models
 
 
 class BlockViewSet(
-    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet
 ):
     serializer_class = serializers.BlockSerializer
     queryset = models.Block.objects.all()
@@ -35,7 +37,7 @@ class TransactionVerifyViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSe
     def verify(self, request, **kwargs):
         tx_hash = request.data["tx_hash"]
         for obj in models.Block.objects.all():
-            if tx_hash == serializers.calc_block_hash_sig(obj):
+            if tx_hash == obj.calc_block_hash_sig():
                 return Response(
                     {"tx_hash": tx_hash, "status": "Transaction is valid"},
                     status=status.HTTP_200_OK,
