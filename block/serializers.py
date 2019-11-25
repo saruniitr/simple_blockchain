@@ -11,6 +11,7 @@ def create_block(tx_obj):
         "id": tx_obj.id,
         "sender": tx_obj.sender.id,
         "recipient": tx_obj.recipient.id,
+        "role": tx_obj.role.id,
         "data": tx_obj.data,
     }, sort_keys=True)
 

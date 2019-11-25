@@ -12,12 +12,14 @@ class TxTestCase(TestCase):
 
         sender = models.Entity.objects.get(name="Sender")
         recipient = models.Entity.objects.get(name="Receiver")
+        role = models.Role.objects.first()
 
         for i in range(5):
             models.Tx.objects.create(
                 tx_type="INTERNAL",
                 sender=sender,
                 recipient=recipient,
+                role=role,
                 data=json.dumps({"data": f"Transaction {i+1}"}, sort_keys=True),
             )
         self.assertEqual(models.Tx.objects.all().count(), 6)

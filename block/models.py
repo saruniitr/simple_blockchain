@@ -7,6 +7,9 @@ from django_extensions.db.models import TimeStampedModel
 class Role(models.Model):
     name = models.CharField(max_length=32)
 
+    def __str__(self):
+        return self.name
+
 
 class Entity(models.Model):
     INTERNAL = "INTERNAL"
@@ -31,6 +34,10 @@ class Tx(TimeStampedModel):
     )
     data = models.CharField(max_length=4096, blank=True, null=True)
     tx_hash = models.CharField(max_length=64, blank=True, null=True)
+    role = models.ForeignKey(Role, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"transaction_{self.tx_type}"
 
 
 class Block(TimeStampedModel):
