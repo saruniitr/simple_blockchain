@@ -1,5 +1,6 @@
 FROM python:3
 ENV PYTHONUNBUFFERED 1
+RUN export TERM=xterm-256color
 RUN apt-get update
 RUN apt-get install -y postgresql
 RUN mkdir /usr/src/app

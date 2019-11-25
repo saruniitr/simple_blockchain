@@ -36,7 +36,6 @@ class BlockSerializer(serializers.ModelSerializer):
 
     def create(self, *args, **kwargs):
         obj = super().create(*args, **kwargs)
-        print("Block serializer create")
         return obj
 
 
