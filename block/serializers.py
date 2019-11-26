@@ -1,10 +1,13 @@
 import hashlib
 import json
+import zmq
 
 from block import models
 from rest_framework import serializers
 
-
+context = zmq.Context()
+socket = context.socket(zmq.REQ)
+socket.connect("tcp://server_node:5555")
 
 def create_block(tx_obj):
     data = json.dumps({
@@ -30,6 +33,19 @@ def create_block(tx_obj):
     return b.calc_block_hash_sig()
 
 
+def send_tx_to_node(tx):
+    data = json.dumps({
+        "id": tx.id,
+        "sender": tx.sender.id,
+        "recipient": tx.recipient.id,
+        "role": tx.role.id,
+        "data": tx.data,
+    }, sort_keys=True)
+
+    socket.send_string(data)
+    message = socket.recv()
+
+
 class BlockSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Block
@@ -51,6 +67,10 @@ class TxSerializer(serializers.ModelSerializer):
 
         obj.tx_hash = create_block(obj)
         obj.save()
+
+        # TODO: Move block creation to server_node
+        # At the moment we only send a message
+        send_tx_to_node(obj)
         return obj
 
 

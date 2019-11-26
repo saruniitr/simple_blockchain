@@ -3,6 +3,11 @@ version: '3'
 services:
   db:
     image: postgres
+
+  server_node:
+    build: server_node
+    environment:
+      - ZMQ_BIND_ADDRESS=tcp://0.0.0.0:5555
   api:
     build: .
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
@@ -12,3 +17,4 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - server_node
